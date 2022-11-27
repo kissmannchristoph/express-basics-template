@@ -1,5 +1,5 @@
 import express from 'express';
-import database from "./database";
+import database from "./database/database";
 //import { RequestHelper, ResponseHelper } from './net';
 
 const app = express();
@@ -8,7 +8,7 @@ const app = express();
 app.use((req: any, res: any, next: any) => {
  // let _request = RequestHelper(req, res)
  // let _response = ResponseHelper(_request)
-  console.log('request time: ', Date.now(), _request)
+  console.log('request time: ', Date.now())
   next();
 })
 

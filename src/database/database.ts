@@ -1,5 +1,7 @@
-export class DatabaseUtil {
-  constructor(private name: string) {}
+export abstract class DatabaseUtil {
+  constructor(public name: string) {
+    console.log(this.name);
+  }
 
   abstract getByIndex(key: string, value: any): any;
   abstract setByIndex(key: string, value: any): any;
