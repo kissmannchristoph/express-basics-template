@@ -1,0 +1,22 @@
+{
+  "name": "nodejs-typescript",
+  "version": "1.0.0",
+  "description": "NodeJs with Typescript",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "start": "tsc & node ./dist/index.js",
+    "watch-and-run": "tsc -w & nodemon -q -w dist dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^17.0.0",
+    "axios": "^0.21.1",
+    "express": "^4.18.2",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.5.4"
+  }
+}
