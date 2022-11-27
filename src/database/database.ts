@@ -1,6 +1,6 @@
 export abstract class DatabaseUtil {
   constructor(public name: string) {
-    console.log(this.name);
+    //console.log(this.name);
   }
 
   abstract getByIndex(key: string, value: any): any;

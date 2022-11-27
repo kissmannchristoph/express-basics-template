@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs, {readFileSync} from 'fs';
 import Database from './database';
 
 const MAIN_DIR = __dirname + "/../../";
@@ -13,8 +13,11 @@ class JsonDatabaseClass extends Database {
 
   read() {
     try {
-      return JSON.parse(fs.readFileSync(this.datadir + this.name + '.json'));
-    } catch (ex: any) { return false; }
+    return JSON.parse(readFileSync(this.datadir + this.name + ".json").toString());
+    } catch (error: any)
+    {
+      return null;
+    }
   }
 
   write(data: any) {
@@ -22,11 +25,14 @@ class JsonDatabaseClass extends Database {
   }
 
   getByIndex(key: string, value: any) {
+    if (!this.read())
+       return null;
+      
     return this.read().find((d: any) => d[key] === value);
   }
 
   setByIndex(key: string, value: any) {
-
+    
   }
 }
 

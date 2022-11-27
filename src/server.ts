@@ -1,21 +1,68 @@
 import express from 'express';
-import database from "./database/database";
-//import { RequestHelper, ResponseHelper } from './net';
 
-const app = express();
+export interface Middleware {
+  name: string;
 
-/* middleware */
-app.use((req: any, res: any, next: any) => {
- // let _request = RequestHelper(req, res)
- // let _response = ResponseHelper(_request)
-  console.log('request time: ', Date.now())
-  next();
-})
-
-/* route */
-
-const start = () => {
-  app.listen(3000, () => console.log('listen port: 3000'));
+  bootstrap(req: any, res: any, next: any): any;
 }
 
-export { start };
+const Server = () => {
+  const app = express();
+  
+  
+  let middlewareList: Middleware[] = [];
+  //let routeList = [];
+/* route */
+
+
+  const addMiddleware = (middleware: Middleware) => {
+    middlewareList.push(middleware);
+  }
+  
+  const addRoute = (_type: "get" | "post", _url: string, _func: any, _name: string, middleware: string[]) => {
+    
+    let next = false;
+     let skip = false;   
+    app[_type](_url, async (req: any, res: any) => {
+      for (let middlewa of middleware) {
+          
+              if (skip) {
+                break;
+             
+              }
+          
+        next = true;
+        let selectedMiddleware = middlewareList.find((middlewaItem) => middlewaItem.name === middlewa);
+        
+        selectedMiddleware.bootstrap(req, res, (_skip: boolean = false) => {       
+        if (!skip) {
+         skip = _skip;
+          next = false;
+          }
+        })
+        
+        
+        console.log("wait begin");
+         while (next) {} 
+         
+         console.log("wait end");  
+  
+      }
+      
+      if (skip)
+        return;
+      
+      if (_func)
+       _func(req, res);
+    });
+    
+  }
+
+
+  app.listen(3000, () => console.log('listen port: 3000'));
+
+  return {addMiddleware, addRoute}
+}
+
+
+export default Server;
