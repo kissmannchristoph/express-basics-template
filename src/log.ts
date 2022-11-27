@@ -3,22 +3,30 @@ import JsonDatabase from "./database/jsonDatabase";
 const DEBUG = true;
 
 const Debug = (msg: string) => {
-  console.log('LOG DEBUG', msg)
+  console.log(msg);
+
+ 
+}
+
+const Log = (logType: "INFO" | "WARN" | "CRIT", msg: string) => {
 
   let data = JsonDatabase("log").read();
 
-  if (!data)
-    data = [];
+  if (!data) {
+    data = {'li': []};
+    
 
-  data.push({ "type": ["log", "debug"], "data": "1" });
+    data.li.push({ "type": ["log", "debug"], "data": "1" });
 
+    JsonDatabase("log").write(data);
+  }
+
+  data.li.push({"type": [logType], "data": msg});
+  
   JsonDatabase("log").write(data);
-}
-
-const Log = (logType: "INFO" | "WARN" | "CRIT", ...msg: any[]) => {
 
   if (DEBUG)
-    Debug("asdasd");
+    Debug(logType + "–" + msg);
 }
 
 export default Log
