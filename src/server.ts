@@ -8,8 +8,9 @@ export interface Middleware {
 
 const Server = () => {
   const app = express();
-  
-  
+  app.use(express.static(__dirname + '/../public'));
+app.set('views', __dirname + '/../public/views');
+app.set('view engine', 'ejs');
   let middlewareList: Middleware[] = [];
   //let routeList = [];
 /* route */
@@ -19,7 +20,7 @@ const Server = () => {
     middlewareList.push(middleware);
   }
   
-  const addRoute = (_type: "get" | "post", _url: string, _func: any, _name: string, middleware: string[]) => {
+  const addRoute = async (_type: "get" | "post", _url: string, _func: any, _name: string, middleware: string[]) => {
     
     let next = false;
      let skip = false;   
