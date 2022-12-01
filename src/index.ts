@@ -4,8 +4,12 @@ dotenv.config();
 import Server, { Middleware } from "./server";
 import Session from "./session/session";
 
+import Database from "./JsonDB/Database";
+
 const ServerInstance = Server();
 const { addMiddleware, addRoute } = ServerInstance;
+
+const notLoad = true;
 
 class auth implements Middleware {
   constructor(public name = "auth") {}
@@ -59,39 +63,49 @@ class login implements Middleware {
 }
 //https://stackoverflow.com/questions/5710358/how-to-access-post-form-fields-in-express
 //https://raddy.dev/blog/nodejs-setup-with-html-css-js-ejs/
-addMiddleware(new auth());
-addMiddleware(new login());
-addMiddleware(new area());
 
-addRoute("get", "/login", null, "login", ["login"]);
+if (!notLoad) {
+  load();
+} else {
+  const userTable = Database.loadTable("users");
+  console.log(userTable);
+}
 
-addRoute(
-  "get",
-  "/logout",
-  (req: any, res: any) => {
-    req.user = null;
-    res.render("index", { text: "GG" });
-  },
-  "logout",
-  ["auth", "area"]
-);
+function load() {
+  addMiddleware(new auth());
+  addMiddleware(new login());
+  addMiddleware(new area());
 
-addRoute(
-  "get",
-  "/",
-  (req: any, res: any) => {
-    res.render("index", { text: "Hey" });
-  },
-  "index",
-  []
-);
+  addRoute("get", "/login", null, "login", ["login"]);
 
-addRoute(
-  "get",
-  "/index",
-  (req: any, res: any) => {
-    res.render("home");
-  },
-  "root",
-  ["auth", "area"]
-);
+  addRoute(
+    "get",
+    "/logout",
+    (req: any, res: any) => {
+      req.user = null;
+      res.render("index", { text: "GG" });
+    },
+    "logout",
+    ["auth", "area"]
+  );
+
+  addRoute(
+    "get",
+    "/",
+    (req: any, res: any) => {
+      res.render("index", { text: "Hey" });
+    },
+    "index",
+    []
+  );
+
+  addRoute(
+    "get",
+    "/index",
+    (req: any, res: any) => {
+      res.render("home");
+    },
+    "root",
+    ["auth", "area"]
+  );
+}
