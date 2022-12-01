@@ -8,7 +8,6 @@ export abstract class DatabaseUtil {
 }
 
 export default abstract class Database extends DatabaseUtil {
-
   constructor(name: string) {
     super(name);
   }

@@ -1,0 +1,33 @@
+{
+  "schema": {
+    "id": {
+      "key": "primary",
+      "plugins": ["autoIncrement"]
+    },
+    "username": {
+      "plugins": ["notNull"]
+    },
+    "password": {
+      "plugins": ["notNull"]
+    },
+    "createdAt": {
+      "plugins": ["createTimestamp"]
+    },
+    "updatedAt": {
+      "plugins": ["createTimestamp", "updateTimestamp"]
+    }
+  },
+  "keys": [
+    {
+      "name": "primary",
+      "type": "unique"
+    }
+  ],
+  "data": [
+    {
+      "id": 1,
+      "username": "gerredtor",
+      "password": "123"
+    }
+  ]
+}
