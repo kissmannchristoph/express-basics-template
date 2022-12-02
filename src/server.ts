@@ -9,8 +9,17 @@ export interface Middleware {
 const Server = () => {
   const app = express();
   app.use(express.static(__dirname + "/../public"));
+
   app.set("views", __dirname + "/../public/views");
   app.set("view engine", "ejs");
+
+  app.use(function (req, res, next) {
+    res.locals.query = req.query;
+    res.locals.url = req.originalUrl;
+
+    next();
+  });
+
   let middlewareList: Middleware[] = [];
   //let routeList = [];
   /* route */

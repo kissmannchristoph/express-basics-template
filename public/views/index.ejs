@@ -9,6 +9,11 @@
 <body>
   <%- include('header'); -%>
 
+<%= query.loginfail %>
+
+<% if (Object.keys(query).includes("loginfail")) { %>
+<div class="state error">Login Daten falsch</div>
+<% } %>
     <div class="login">
     <h1>Einloggen</h1>
     <form method="get" action="login">
@@ -19,3 +24,5 @@
     </div>
 </body>
 </html>
+
+
