@@ -20,12 +20,12 @@ export class JsonResponse extends Response {
 }
 
 export class ProxyResponse extends Response {
-  constructor(private readonly json: {}) {
+  constructor(private readonly target: string) {
     super();
   }
 
   public sendResponse(req: any, res: any) {
-    this.server.httpProxy.web(req, res, {target: "https://photoproject-rm.de"}, (e) => {
+this.server.httpProxy.web(req, res, {target: this.target}, (e:any) => {
 
     })
     return true;

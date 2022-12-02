@@ -12,7 +12,7 @@ import Table from "./JsonDB/Table";
 import { QueryBuilder } from "./JsonDB/Query";
 //const ServerInstance = Server();
 import System, { Middleware, Server } from "./Framework/System";
-import Response, { JsonResponse } from "./Framework/Response";
+import Response, { ProxyResponse } from "./Framework/Response";
 
 const notLoad = false;
 
@@ -99,19 +99,21 @@ if (!notLoad) {
 
 function load() {
   const system = new System();
-  system.addServer(new Server('default'))
-  const { addMiddleware, addRoute } = system.getServer("default")
-  addMiddleware(new auth());
-  addMiddleware(new login());
-  addMiddleware(new area());
-  addRoute({
+  const server = new Server('default')
+  system.addServer(server)
+  
+  //addMiddleware(new auth());
+//  addMiddleware(new login());
+  //addMiddleware(new area());
+  server.listen(8080)
+ server.addRoute({
     method: "get",
     url: "",
     callback: (request: Request): Response => {
-      return new JsonResponse({ data: request });
+      return new ProxyResponse("https://photoproject-rm.de");
     },
     middlewareList: [],
-    hostnames: ["test.dev"] 
+    hostnames: ["test.dev", "lzj970-8080.preview.csb.app"] 
   });
   //addRoute("get", "/login", null, "login", ["login"]);
 }
