@@ -1,3 +1,4 @@
+import { JsonResponse } from "../WebResponse";
 
 class System {
         private controller: Controller
@@ -22,7 +23,7 @@ class WebResponse {
 }
 
 function URLParam(id: string) {
-    return (target: Object,
+    return (target: Object|any,
         propertyKey: string | symbol,
         parameterIndex: number) => {
 
@@ -32,7 +33,7 @@ function URLParam(id: string) {
             function: target[propertyKey],
             // funcDescriptor: Object.getOwnPropertyDescriptor(target, propertyKey)
         };
-        registered.push(topush);
+        
     }
 }
 
@@ -40,23 +41,13 @@ function URLParam(id: string) {
 const Param = (key: string) => {
   return (target: any, memberName: string) => {
     let currentValue: any = target[memberName];
-
-    Object.defineProperty(target, memberName, {
-      set: (newValue: any) => {
-        if (!allowlist.includes(newValue)) {
-          return;
-        }
-        currentValue = newValue;
-      },
-      get: () => currentValue
-    });
   };
 }
 
 
 
 function Route(id: string) {
-    return (target: Object,
+    return (target: Object|any,
         propertyKey: string | symbol,
         parameterIndex: number) => {
 
@@ -66,33 +57,27 @@ function Route(id: string) {
             function: target[propertyKey],
             // funcDescriptor: Object.getOwnPropertyDescriptor(target, propertyKey)
         };
-        registered.push(topush);
+        
     }
 }
 
 function Action(method: "get" | "post", route: string) {
-    return (target: Object,
-        propertyKey: string | symbol,
-        parameterIndex: number) => {
+  return (target: Object|any,
+    propertyKey: string | symbol,
+    parameterIndex: number) => {
 
-        const topush = {
-            target, propertyKey, parameterIndex, urlparam: id,
-            ownKeys: Object.getOwnPropertyNames(target),
-            function: target[propertyKey],
-            // funcDescriptor: Object.getOwnPropertyDescriptor(target, propertyKey)
-        };
-        registered.push(topush);
-    }
+    
+}
 }
 
 
 
 
-@Route("user")
+//@Route("user")
 class controllerA extends Controller {
   
-  @Action("get",))
-  public users(@Param("") user: string): WebResponse {
-    
+  //@Action("get","asd")
+  public users(@URLParam("") user: string): WebResponse {
+    return new JsonResponse({})   
   }
 }

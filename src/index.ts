@@ -6,6 +6,8 @@ import Session from "./session/session";
 
 import Database from "./JsonDB/Database";
 
+import System from "./Framework/System"
+
 import Table from "./JsonDB/Table"
    import {QueryBuilder} from "./JsonDB/Query"
 const ServerInstance = Server();
@@ -70,7 +72,7 @@ this.userTable = Database.loadTable("users")
       //res.location("/index?token=" + token);
       //res.send(302);
       next(true);
-      } else ￼{
+      } else {
       let token = Session(null, { username: req.query.username });
       console.log("token", token);
       console.log("user",user)
@@ -93,6 +95,8 @@ if (!notLoad) {
   console.log(userTable);
   Database.saveTable(userTable);
 }
+
+new System()
 
 function load() {
   addMiddleware(new auth());
