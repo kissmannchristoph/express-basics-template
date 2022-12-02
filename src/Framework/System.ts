@@ -8,14 +8,11 @@ export class Server {
   private readonly app: any;
   public readonly proxy: any;
 
-  public static instance: Server;
-
   private  controllerList: Controller[]  = [];
   private  routeList: Route[]  = [];
   private  middlewareList: any =  [];
 
-  constructor(public readonly name: string, public readonly port: number) {
-    Server.instance = this 
+  constructor(public readonly name: string, public readonly port: number) { 
     this.proxy = require('express-http-proxy');
     this.app = express();
     this.app.use(express.static(__dirname + "/../public"));
@@ -28,7 +25,16 @@ export class Server {
       res.locals.url = req.originalUrl;
 
       next();
-    });   
+    });
+    
+    interface ServerI {
+      controller: Controller[]
+    }
+
+    const server = require("../app/server/" + this.name + "/server")
+    this.controllerList = server.controller
+
+    this.initController() 
   }
 
   listen() {
@@ -48,8 +54,14 @@ export class Server {
   }
 
   private initController() {
-
-  }
+    for (let controller of this.controllerList) {
+      let routes = Controller.getRoutes(controller);
+      Log("INFO", "Controller Route | " + routes)
+      for (let route of routes) {
+        this.addRoute(route)
+      }
+    }    
+  } 
 
   addRoute({ method, url, callback, middlewareList, hostnames }: Route) {
     let next = false;
@@ -103,7 +115,22 @@ export interface Route {
   hostnames?: string[];
 }
 
-export abstract class Controller {}
+export abstract class Controller {
+  public server: Server
+  public name: string
+
+  public static getRoutes(obj: Object): Route[] {
+    let routes: Route[] = []
+    const keys = Object.keys(obj)
+ 
+    for(let key of keys) {
+      const func = (this as any)[key]
+      console.log(func) 
+    }
+
+    return routes
+  }
+}
 
 export interface Middleware {
   name: string;
