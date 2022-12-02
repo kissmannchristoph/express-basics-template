@@ -6,6 +6,8 @@ export default class UserController extends Controller {
   constructor() {
     super();
   }
+  
+  public b: string = "dd"
 
   public a() {}
 }
