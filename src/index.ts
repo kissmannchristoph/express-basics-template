@@ -8,10 +8,10 @@ import Database from "./JsonDB/Database";
 
 //import System from "./Framework/System"
 
-import Table from "./JsonDB/Table"
-   import {QueryBuilder} from "./JsonDB/Query"
+import Table from "./JsonDB/Table";
+import { QueryBuilder } from "./JsonDB/Query";
 //const ServerInstance = Server();
-import System, {Middleware} from "./Framework/System";
+import System, { Middleware } from "./Framework/System";
 import Response, { JsonResponse } from "./Framework/Response";
 
 const notLoad = false;
@@ -53,36 +53,36 @@ class area implements Middleware {
 class login implements Middleware {
   private userTable: Table;
   constructor(public name = "login") {
-this.userTable = Database.loadTable("users")
-}
-
-
-
-
+    this.userTable = Database.loadTable("users");
+  }
 
   bootstrap(req: any, res: any, next: any) {
     if (!req.user && req.query.username && req.query.password) {
-      let queryBuilder: QueryBuilder = new QueryBuilder(this.userTable)
-      
-      let user = queryBuilder.Select().where([["username", req.query.username], ["password", req.query.password]]).find();
-      
+      let queryBuilder: QueryBuilder = new QueryBuilder(this.userTable);
+
+      let user = queryBuilder
+        .Select()
+        .where([
+          ["username", req.query.username],
+          ["password", req.query.password],
+        ])
+        .find();
+
       if (!user) {
-        
-   
-      res.redirect("/?loginfail");
-      //res.location("/index?token=" + token);
-      //res.send(302);
-      next(true);
+        res.redirect("/?loginfail");
+        //res.location("/index?token=" + token);
+        //res.send(302);
+        next(true);
       } else {
-      let token = Session(null, { username: req.query.username });
-      console.log("token", token);
-      console.log("user",user)
-      res.redirect("/index?token=" + token);
-      //res.location("/index?token=" + token);
-      //res.send(302);
-      next(true);
+        let token = Session(null, { username: req.query.username });
+        console.log("token", token);
+        console.log("user", user);
+        res.redirect("/index?token=" + token);
+        //res.location("/index?token=" + token);
+        //res.send(302);
+        next(true);
+      }
     }
-}
     next();
   }
 }
@@ -98,18 +98,17 @@ if (!notLoad) {
 }
 
 function load() {
-  const {addMiddleware, addRoute} = new System();
+  const { addMiddleware, addRoute } = new System();
   addMiddleware(new auth());
   addMiddleware(new login());
   addMiddleware(new area());
-addRoute({
-  "method": "get",
-  "url": "",
-  "callback": (request: Request): Response => {
-    return new JsonResponse({"data": request})
-  },
-  "middlewareList": []
-})
+  addRoute({
+    method: "get",
+    url: "",
+    callback: (request: Request): Response => {
+      return new JsonResponse({ data: request });
+    },
+    middlewareList: [],
+  });
   //addRoute("get", "/login", null, "login", ["login"]);
-
 }

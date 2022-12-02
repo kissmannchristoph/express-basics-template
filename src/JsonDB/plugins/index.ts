@@ -1,6 +1,6 @@
 import DynamicClass from "../../class/DynamicClass";
 import Table from "../Table";
-import Plugin from "../Plugin"
+import Plugin from "../Plugin";
 
 export abstract class PluginBase {
   public name: string;
@@ -36,7 +36,7 @@ export abstract class PluginBase {
       let pluginInstance: Plugin;
 
       // try {
-      
+
       pluginInstance = DynamicClass.InstanceObject<Plugin>(
         context,
         plugin,

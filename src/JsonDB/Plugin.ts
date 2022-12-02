@@ -1,4 +1,4 @@
-import Table from "./Table"
+import Table from "./Table";
 import DynamicClass from "../class/DynamicClass";
 import plugins from "./plugins";
 export default abstract class Plugin {
