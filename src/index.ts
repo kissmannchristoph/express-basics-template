@@ -101,7 +101,8 @@ function load() {
 
   addRoute("get", "/login", null, "login", ["login"]);
 
-addRoute("get", "/users", (req: any, res: any) => {
+addRoute("get", "/users", (req: Request, res: any) => {
+  
   const queryBuilder = new QueryBuilder(Database.loadTable("users"));
    res.locals.users = queryBuilder.Select().all()
    res.render("users")
