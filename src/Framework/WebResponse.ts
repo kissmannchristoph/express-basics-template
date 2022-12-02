@@ -1,38 +1,4 @@
-export default abstract class WebResponse {
-    constructor() {}
 
-    public abstract sendResponse(req: Request, res: Response): boolean 
-}
-
-export class JsonResponse extends WebResponse {
-    constructor(private readonly json: {}) {
-        super()
-    }
-
-    public sendResponse(req: Request, res: Response) {
-        return true;
-    }
-} 
-
-export class ProxyResponse extends WebResponse {
-    constructor(private readonly json: {}) {
-        super()
-    }
-
-    public sendResponse(req: Request, res: Response) {
-        return true;
-    }
-}
-
-export class ViewResponse extends WebResponse {
-    constructor(private readonly json: {}) {
-        super()
-    }
-
-    public sendResponse(req: Request, res: Response) {
-        return true;
-    }
-}
 const users = (username: string): WebResponse => {
     return new JsonResponse({"username": "hund"})
 }
