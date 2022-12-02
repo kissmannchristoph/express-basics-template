@@ -1,3 +1,6 @@
+import Table from "./Table"
+import DynamicClass from "../class/DynamicClass";
+import plugins from "./plugins";
 export default abstract class Plugin {
   public name: string;
 
@@ -28,7 +31,7 @@ export default abstract class Plugin {
     const entry = table.schema.getByName(entryKey);
     //const plugins = entry.plugins;
 
-    for (let plugin of plugins) {
+    for (let plugin of entry.plugins) {
       let pluginInstance: Plugin;
 
       // try {

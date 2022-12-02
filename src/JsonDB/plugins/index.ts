@@ -1,5 +1,6 @@
 import DynamicClass from "../../class/DynamicClass";
 import Table from "../Table";
+import Plugin from "../Plugin"
 
 export abstract class PluginBase {
   public name: string;
