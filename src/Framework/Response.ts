@@ -1,4 +1,8 @@
+import { Server } from "./System";
+
 export default abstract class Response {
+  public server: Server;
+
   constructor() {}
 
   public abstract sendResponse(res: any): boolean;

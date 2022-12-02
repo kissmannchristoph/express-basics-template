@@ -2,28 +2,19 @@
 import Response from "./Response";
 import express from "express";
 
-export interface Route {
-  method: "get" | "post";
-  url: string;
-  callback: any;
-  middlewareList: string[];
-}
+const httpProxyClass = require("http-proxy");
 
-abstract class Controller {}
-
-export interface Middleware {
-  name: string;
-
-  bootstrap(req: any, res: any, next: any): any;
-}
-
-export default class System {
+export class Server {
   private readonly app: any;
-  constructor(
-    private controllerList: Controller[] = [],
-    private routeList: Route[] = [],
-    private middlewareList: Middleware[] = []
-  ) {
+  private httpProxy: any;
+
+  private readonly controllerList: Controller[];
+  private readonly routeList: Route[];
+  private readonly middlewareList: Middleware[];
+
+  constructor(public readonly name: string) {
+    this.httpProxy = httpProxyClass.createProxyServer();
+
     this.app = express();
     this.app.use(express.static(__dirname + "/../public"));
 
@@ -36,18 +27,27 @@ export default class System {
 
       next();
     });
+  }
 
-    this.app.listen(3000, () => console.log("listen port: 3000"));
+  listen(port: number) {
+    this.app.listen(port, () => console.log("listen port: ${port}"));
+  }
+
+  public get ExpressApp() {
+    return this.app;
   }
 
   addMiddleware(middleware: Middleware) {
     this.middlewareList.push(middleware);
   }
 
-  addRoute({ method, url, callback, middlewareList }: Route) {
+  addRoute({ method, url, callback, middlewareList, hostnames }: Route) {
     let next = false;
     let skip = false;
     this.app[method](url, async (req: any, res: any) => {
+      const requestHost = req.headers.host;
+      if (hostnames && hostnames.indexOf(requestHost) === -1) return;
+
       for (let middlewa of middlewareList) {
         if (skip) {
           break;
@@ -75,8 +75,39 @@ export default class System {
 
       if (callback) {
         const response: Response = callback(req);
+        response.server = this;
         response.sendResponse(res);
       }
     });
+  }
+}
+
+export interface Route {
+  method: "get" | "post";
+  url: string;
+  callback: any;
+  middlewareList: string[];
+  hostnames?: string[];
+}
+
+abstract class Controller {}
+
+export interface Middleware {
+  name: string;
+
+  bootstrap(req: any, res: any, next: any): any;
+}
+
+export default class System {
+  private readonly serverList: Server[];
+
+  constructor() {}
+
+  addServer(server: Server) {
+    this.serverList.push(server);
+  }
+
+  getServer(name: string): Server {
+    return this.serverList.filter((entry: Server) => entry.name === name)[0];
   }
 }
