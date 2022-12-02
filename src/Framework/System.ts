@@ -10,9 +10,9 @@ export class Server {
   public httpProxy: any;
 
 
-  private readonly controllerList: Controller[];
-  private readonly routeList: Route[];
-  private readonly middlewareList: Middleware[];
+  private  controllerList: Controller[]  = [];
+  private  routeList: Route[]  = [];
+  private  middlewareList: any =  [];
 
   constructor(public readonly name: string) {
     this.httpProxy = httpProxyClass.createProxyServer();
@@ -49,7 +49,7 @@ export class Server {
     this.app[method](url, async (req: any, res: any) => {
       const requestHost = req.headers.host;
       if (hostnames && hostnames.indexOf(requestHost) === -1) {
-        Log("WARN", 'hostname active but, requested Host is ${requestHost}')
+    Log("WARN", 'hostname active but, requested Host is '+requestHost)
         return; 
       }
       for (let middlewa of middlewareList) {
@@ -103,11 +103,12 @@ export interface Middleware {
 }
 
 export default class System {
-  private readonly serverList: Server[];
+  private serverList: Server[] = [];
 
   constructor() {}
 
   addServer(server: Server) {
+ 
     this.serverList.push(server);
   }
 
