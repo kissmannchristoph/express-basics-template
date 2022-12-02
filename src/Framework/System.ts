@@ -12,6 +12,20 @@ export class Server {
   private  routeList: Route[]  = [];
   private  middlewareList: any =  [];
 
+  private controllerStates: any = []
+
+  public getControllerState(name: string): null | Controller {
+    let controllerState = this.controllerStates[name]
+
+    if (!controllerState) return null
+
+    return controllerState
+  }
+
+  public setControllerState(name: string, controller: Controller) {
+    this.controllerStates[name] = controller
+  }
+
   constructor(public readonly name: string, public readonly port: number) { 
     this.proxy = require('express-http-proxy');
     this.app = express();
@@ -26,9 +40,12 @@ export class Server {
 
       next();
     });
+  }
+
+  public init() {
 
     const server = require("../app/server/" + this.name + "/server").default;
-    console.log("ssksskskkssk", server)
+
     this.controllerList = server.controller
 
     this.initController() 
@@ -52,6 +69,7 @@ export class Server {
 
   private initController() {
     for (let controller of this.controllerList) {
+      controller.server = this
       let routes = Controller.getRoutes(controller);
       Log("INFO", "Controller Route | " + routes)
       for (let route of routes) {
@@ -59,6 +77,10 @@ export class Server {
       }
     }    
   } 
+
+  public registerController(controller: any) {
+
+  }
 
   addRoute({ method, url, callback, middlewareList, hostnames }: Route) {
     let next = false;
@@ -104,22 +126,58 @@ export class Server {
   }
 }
 
-export interface Route {
+export abstract class Route {
   method: "get" | "post";
   url: string;
-  callback: any;
+  callback?: any;
+  action?: string;
   middlewareList: string[];
   hostnames?: string[];
 }
 
+interface ActionParameter {
+  target: "query",
+  key: string
+}
+
 export abstract class Controller {
-  public server: Server
-  public name: string
+ 
+  private routes: Route[] = []
+  private actionParameters: any = []
+
+  constructor(public name: string, public serverName: string) {
+   
+  }
+
+  private route(route: Route) {
+    const parameters = this.getActionParameters(route.action)
+    
+    route.callback()    
+  }
+
+  public addRoute(route: Route)
+  {
+    route.callback = this.route(route)
+  }
+
+  public getActionParameters(functionName: string): ActionParameter[]
+  {
+    let parameters = this.actionParameters[functionName];
+
+    if (!parameters) parameters = []
+  
+    return parameters
+  }
+
+  public addActionParameter(functionName: string, parameter:    ActionParameter) {
+    const parameters = this.getActionParameters(functionName)
+    parameters.push(parameter)
+  }
 
   public static getRoutes(obj: any): Route[] {
     let routes: Route[] = []
     //const object = Object.create(obj)
- console.log(Object.getOwnPropertyNames(obj))
+     console.log(Object.getOwnPropertyNames(obj))
     /*for(let key of keys) {
       const func = (this as any)[key]
       console.log(func) 
@@ -137,9 +195,15 @@ export interface Middleware {
 
 export default class System {
   private serverList: Server[] = [];
+  public static instance: System
 
   constructor() {
+    System.instance = this
     if (config().server) this.initServer()
+
+    for (let server of this.serverList) {
+      server.init()
+    }
   }
 
   private initServer() {
@@ -152,7 +216,7 @@ export default class System {
   addServer(server: Server) {
     this.serverList.push(server);
     Log("INFO", "server added | name: " + server.name)
-    server.listen()
+   // server.listen()
   }
 
   getServer(name: string): Server {

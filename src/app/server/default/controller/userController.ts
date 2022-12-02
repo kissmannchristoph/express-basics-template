@@ -1,13 +1,15 @@
-import { ControllerDecorator } from "../../../../Framework/decorators";
+import Response from "../../../../Framework/Response";
+import { ControllerDecorator, ActionDecorator, QueryParam } from "../../../../Framework/decorators";
 import { Controller } from "../../../../Framework/System";
 
-@ControllerDecorator("users")
+@ControllerDecorator()
 export default class UserController extends Controller {
   constructor() {
-    super();
+    super("users", "default");
   }
-  
-  public b: string = "dd"
 
-  public a() {}
+  @ActionDecorator("get", "/")
+  public test(@QueryParam("username") username: string = ''): Response {
+    return null
+  }
 }
