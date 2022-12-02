@@ -1,0 +1,13 @@
+{
+    "server": [
+         {"name": "default",
+            "port": 8080
+}       ],
+    "reverseProxy": [
+        {
+            "port": 80,
+            "hostname": "test.dev",
+            "target": "http://google.de"
+        }
+    ]    
+}

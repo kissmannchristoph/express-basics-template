@@ -2,21 +2,21 @@
 import Response from "./Response";
 import express from "express";
 import Log from "../log";
-
-const httpProxyClass = require("http-proxy");
+import config from "../config"
 
 export class Server {
   private readonly app: any;
-  public httpProxy: any;
+  public readonly proxy: any;
 
+  public static instance: Server;
 
   private  controllerList: Controller[]  = [];
   private  routeList: Route[]  = [];
   private  middlewareList: any =  [];
 
-  constructor(public readonly name: string) {
-    this.httpProxy = httpProxyClass.createProxyServer();
-
+  constructor(public readonly name: string, public readonly port: number) {
+    Server.instance = this 
+    this.proxy = require('express-http-proxy');
     this.app = express();
     this.app.use(express.static(__dirname + "/../public"));
 
@@ -29,10 +29,12 @@ export class Server {
 
       next();
     });
+
+
   }
 
-  listen(port: number) {
-    this.app.listen(port, () => console.log("listen port: ${port}"));
+  listen() {
+    this.app.listen(this.port, () => Log("INFO", "server started | name: " + this.name + " | port: " + this.port));
   }
 
   public get ExpressApp() {
@@ -46,7 +48,7 @@ export class Server {
   addRoute({ method, url, callback, middlewareList, hostnames }: Route) {
     let next = false;
     let skip = false;
-    this.app[method](url, async (req: any, res: any) => {
+    this.app[method](url, async (req: any, res: any, _next: any) => {
       const requestHost = req.headers.host;
       if (hostnames && hostnames.indexOf(requestHost) === -1) {
     Log("WARN", 'hostname active but, requested Host is '+requestHost)
@@ -59,7 +61,7 @@ export class Server {
 
         next = true;
         let selectedMiddleware = this.middlewareList.find(
-          (middlewaItem) => middlewaItem.name === middlewa
+          (middlewaItem:any) => middlewaItem.name === middlewa
         );
 
         selectedMiddleware.bootstrap(req, res, (_skip: boolean = false) => {
@@ -80,7 +82,8 @@ export class Server {
       if (callback) {
         const response: Response = callback(req);
         response.server = this;
-        response.sendResponse(req, res);
+        response.sendResponse(req, res, _next);
+        
       }
     });
   }
@@ -94,7 +97,7 @@ export interface Route {
   hostnames?: string[];
 }
 
-abstract class Controller {}
+export abstract class Controller {}
 
 export interface Middleware {
   name: string;
@@ -105,11 +108,21 @@ export interface Middleware {
 export default class System {
   private serverList: Server[] = [];
 
-  constructor() {}
+  constructor() {
+    if (config().server) this.initServer()
+  }
+
+  private initServer() {
+    for (let {name, port} of config().server) {
+      const server = new Server(name, port)
+      this.addServer(server)
+    }
+  }
 
   addServer(server: Server) {
- 
     this.serverList.push(server);
+    Log("INFO", "server added | name: " + server.name)
+    server.listen()
   }
 
   getServer(name: string): Server {
