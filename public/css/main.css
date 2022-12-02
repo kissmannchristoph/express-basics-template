@@ -73,3 +73,23 @@ body {
   width: 100%;
   display: block;
 }
+
+.users {
+  display: flex;
+  flex-flow: column;
+  width: 50%;
+  margin: 0 auto;
+}
+
+.users .user {
+  display: flex;
+  flex-flow: row;
+  height: 50px;
+  line-height: 50px;
+  justify-content: space-between;
+  border-bottom: 1px solid black;
+}
+
+.users .user div {
+  border: 1px solid black;
+}

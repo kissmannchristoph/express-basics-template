@@ -53,6 +53,10 @@ class login implements Middleware {
 this.userTable = Database.loadTable("users")
 }
 
+
+
+
+
   bootstrap(req: any, res: any, next: any) {
     if (!req.user && req.query.username && req.query.password) {
       let queryBuilder: QueryBuilder = new QueryBuilder(this.userTable)
@@ -60,8 +64,9 @@ this.userTable = Database.loadTable("users")
       let user = queryBuilder.Select().where([["username", req.query.username], ["password", req.query.password]]).find();
       
       if (!user) {
+        
    
-      res.redirect("/404");
+      res.redirect("/?loginfail");
       //res.location("/index?token=" + token);
       //res.send(302);
       next(true);
@@ -95,6 +100,13 @@ function load() {
   addMiddleware(new area());
 
   addRoute("get", "/login", null, "login", ["login"]);
+
+addRoute("get", "/users", (req: Request, res: any) => {
+  
+  const queryBuilder = new QueryBuilder(Database.loadTable("users"));
+   res.locals.users = queryBuilder.Select().all()
+   res.render("users")
+}, "users",[])
 
   addRoute(
     "get",
