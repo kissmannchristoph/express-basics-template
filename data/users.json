@@ -1,22 +1,19 @@
 {
-  "schema": {
-    "id": {
+  "schema": [
+    {
+      "name": "id",
       "key": "primary",
-      "plugins": ["autoIncrement"]
+      "plugins": ["AutoIncrement"]
     },
-    "username": {
-      "plugins": ["notNull"]
+    {
+      "name": "username",
+      "plugins": ["NotNull"]
     },
-    "password": {
-      "plugins": ["notNull"]
-    },
-    "createdAt": {
-      "plugins": ["createTimestamp"]
-    },
-    "updatedAt": {
-      "plugins": ["createTimestamp", "updateTimestamp"]
+    {
+      "name": "password",
+      "plugins": ["NotNull"]
     }
-  },
+  ],
   "keys": [
     {
       "name": "primary",
