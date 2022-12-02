@@ -5,7 +5,7 @@ export default abstract class Response {
 
   constructor() {}
 
-  public abstract sendResponse(req: any, res: any): boolean;
+  public abstract sendResponse(req: any, res: any, next: any): boolean;
 }
 
 export class JsonResponse extends Response {
@@ -13,7 +13,7 @@ export class JsonResponse extends Response {
     super();
   }
 
-  public sendResponse(req: any, res: any) {
+  public sendResponse(req: any, res: any, next: any) {
     res.send("Invalid Token");
     return true;
   }
@@ -24,10 +24,9 @@ export class ProxyResponse extends Response {
     super();
   }
 
-  public sendResponse(req: any, res: any) {
-this.server.httpProxy.web(req, res, {target: this.target}, (e:any) => {
-
-    })
+  public sendResponse(req: any, res: any, next: any) {
+    this.server.ExpressApp.use(this.server.proxy(this.target))
+    next()
     return true;
   }
 }
@@ -37,7 +36,7 @@ export class ViewResponse extends Response {
     super();
   }
 
-  public sendResponse(req: any, res: any) {
+  public sendResponse(req: any, res: any, next: any) {
     return true;
   }
 }
