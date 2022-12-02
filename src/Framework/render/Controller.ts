@@ -1,6 +1,7 @@
+
 class System {
-  
-  
+        private controller: Controller
+
   
   
   public prepareControllerActionArgs(controller: any, method: "post" | "get", action: string)
