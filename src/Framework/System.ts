@@ -118,8 +118,8 @@ export abstract class Controller {
 
   public static getRoutes(obj: any): Route[] {
     let routes: Route[] = []
-    const object = Object.create(obj)
- console.log(Object.(Object.getPrototypeOf(obj)))
+    //const object = Object.create(obj)
+ console.log(Object.getOwnPropertyNames(Object.getPrototypeOf(obj)))
     /*for(let key of keys) {
       const func = (this as any)[key]
       console.log(func) 
