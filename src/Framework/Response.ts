@@ -5,7 +5,7 @@ export default abstract class Response {
 
   constructor() {}
 
-  public abstract sendResponse(res: any): boolean;
+  public abstract sendResponse(req: any, res: any): boolean;
 }
 
 export class JsonResponse extends Response {
@@ -13,7 +13,7 @@ export class JsonResponse extends Response {
     super();
   }
 
-  public sendResponse(res: any) {
+  public sendResponse(req: any, res: any) {
     res.send("Invalid Token");
     return true;
   }
@@ -24,7 +24,10 @@ export class ProxyResponse extends Response {
     super();
   }
 
-  public sendResponse(res: any) {
+  public sendResponse(req: any, res: any) {
+    this.server.httpProxy.web(req, res, {target: "https://photoproject-rm.de"}, (e) => {
+
+    })
     return true;
   }
 }
@@ -34,7 +37,7 @@ export class ViewResponse extends Response {
     super();
   }
 
-  public sendResponse(res: any) {
+  public sendResponse(req: any, res: any) {
     return true;
   }
 }

@@ -1,12 +1,14 @@
 //import { Request as ExpressRequest, Response as ExpressResponse } from 'express';
 import Response from "./Response";
 import express from "express";
+import Log from "../log";
 
 const httpProxyClass = require("http-proxy");
 
 export class Server {
   private readonly app: any;
-  private httpProxy: any;
+  public httpProxy: any;
+
 
   private readonly controllerList: Controller[];
   private readonly routeList: Route[];
@@ -46,8 +48,10 @@ export class Server {
     let skip = false;
     this.app[method](url, async (req: any, res: any) => {
       const requestHost = req.headers.host;
-      if (hostnames && hostnames.indexOf(requestHost) === -1) return;
-
+      if (hostnames && hostnames.indexOf(requestHost) === -1) {
+        Log("WARN", 'hostname active but, requested Host is ${requestHost}')
+        return; 
+      }
       for (let middlewa of middlewareList) {
         if (skip) {
           break;
@@ -76,7 +80,7 @@ export class Server {
       if (callback) {
         const response: Response = callback(req);
         response.server = this;
-        response.sendResponse(res);
+        response.sendResponse(req, res);
       }
     });
   }

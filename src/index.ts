@@ -11,7 +11,7 @@ import Database from "./JsonDB/Database";
 import Table from "./JsonDB/Table";
 import { QueryBuilder } from "./JsonDB/Query";
 //const ServerInstance = Server();
-import System, { Middleware } from "./Framework/System";
+import System, { Middleware, Server } from "./Framework/System";
 import Response, { JsonResponse } from "./Framework/Response";
 
 const notLoad = false;
@@ -98,7 +98,9 @@ if (!notLoad) {
 }
 
 function load() {
-  const { addMiddleware, addRoute } = new System();
+  const system = new System();
+  system.addServer(new Server('default'))
+  const { addMiddleware, addRoute } = system.getServer("default")
   addMiddleware(new auth());
   addMiddleware(new login());
   addMiddleware(new area());
@@ -109,6 +111,7 @@ function load() {
       return new JsonResponse({ data: request });
     },
     middlewareList: [],
+    hostnames: ["test.dev"] 
   });
   //addRoute("get", "/login", null, "login", ["login"]);
 }
