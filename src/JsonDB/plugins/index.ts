@@ -7,7 +7,7 @@ export abstract class PluginBase {
   private static _plugins: string[];
 
   public get plugins() {
-    return this._plugins;
+    return PluginBase._plugins;
   }
 
   constructor(
