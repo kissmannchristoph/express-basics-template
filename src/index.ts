@@ -69,6 +69,7 @@ if (!notLoad) {
 } else {
   const userTable = Database.loadTable("users");
   console.log(userTable);
+  Database.saveTable(userTable);
 }
 
 function load() {
