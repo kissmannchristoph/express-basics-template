@@ -36,6 +36,7 @@ export abstract class PluginBase {
       let pluginInstance: Plugin;
 
       // try {
+      
       pluginInstance = DynamicClass.InstanceObject<Plugin>(
         context,
         plugin,

@@ -9,19 +9,20 @@ abstract class Controller {
 }
 
 function URLParam (target: Object, propertyKey: string | symbol, parameterIndex: number)  {
-        console.log("p")
-    }
+    console.log("target", target)
+}
 
 export default class System {
     constructor(
         readonly controller: Controller[] = []
     ) {
-        console.log("arguments", this.test.arguments)
+        console.log("system")
+        this.test()
     }
-            
-    public test(@URLParam s: string) 
-    {
 
+    public test(@URLParam s: string = null) 
+    {
+console.log("test")
     }
 }
 
