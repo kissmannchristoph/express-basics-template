@@ -7,10 +7,13 @@
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
+  <%- include('header'); -%>
+
     <div class="login">
     <h1>Einloggen</h1>
     <form method="get" action="login">
       <input placeholder="Benutzername" type="text" name="username" />
+      <input placeholder="Passwort" type="password" name="password" />
       <input type="submit" />
     </form>
     </div>

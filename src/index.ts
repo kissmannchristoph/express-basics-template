@@ -6,10 +6,12 @@ import Session from "./session/session";
 
 import Database from "./JsonDB/Database";
 
+import Table from "./JsonDB/Table"
+   import {QueryBuilder} from "./JsonDB/Query"
 const ServerInstance = Server();
 const { addMiddleware, addRoute } = ServerInstance;
 
-const notLoad = true;
+const notLoad = false;
 
 class auth implements Middleware {
   constructor(public name = "auth") {}
@@ -46,18 +48,33 @@ class area implements Middleware {
 }
 
 class login implements Middleware {
-  constructor(public name = "login") {}
+  private userTable: Table;
+  constructor(public name = "login") {
+this.userTable = Database.loadTable("users")
+}
 
   bootstrap(req: any, res: any, next: any) {
-    if (!req.user && req.query.username) {
+    if (!req.user && req.query.username && req.query.password) {
+      let queryBuilder: QueryBuilder = new QueryBuilder(this.userTable)
+      
+      let user = queryBuilder.Select().where([["username", req.query.username], ["password", req.query.password]]).find();
+      
+      if (!user) {
+   
+      res.redirect("/404");
+      //res.location("/index?token=" + token);
+      //res.send(302);
+      next(true);
+      } else ￼{
       let token = Session(null, { username: req.query.username });
       console.log("token", token);
+      console.log("user",user)
       res.redirect("/index?token=" + token);
       //res.location("/index?token=" + token);
       //res.send(302);
       next(true);
     }
-
+}
     next();
   }
 }
