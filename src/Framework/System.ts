@@ -3,9 +3,6 @@ import Response from "./Response";
 import express from "express";
 import Log from "../log";
 import config from "../config"
-import glob from "glob";
-
-const APP_DIR =__dirname+"/../app/"
 
 export class Server {
   private readonly app: any;
@@ -31,26 +28,7 @@ export class Server {
       res.locals.url = req.originalUrl;
 
       next();
-    });
-
-    //import controller
-    
-    
-    
-  const res = glob(APP_DIR + 'server/'+this.name+'' + '/**/*.ts', (err: any, files: any) =>{
- console.log(this.name, APP_DIR + 'server/'+this.name+'' + '/**/*.js')
-   console.log(err, files)
-    for (let file of files) {
-      import(file.replace(__dirname, '.').replace('.js', ''))
-    }
-  });
-  
-
-
-// use `modules`
-    
-    
-    
+    });   
   }
 
   listen() {
@@ -63,6 +41,14 @@ export class Server {
 
   addMiddleware(middleware: Middleware) {
     this.middlewareList.push(middleware);
+  }
+
+  addController(controller: Controller) {
+    this.controllerList.push(controller)
+  }
+
+  private initController() {
+
   }
 
   addRoute({ method, url, callback, middlewareList, hostnames }: Route) {
