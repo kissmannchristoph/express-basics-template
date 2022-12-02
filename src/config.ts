@@ -1,19 +1,19 @@
-import File from "./File"
+import File from "./File";
 
-const configFile = __dirname + '/../config.json'
-let tmpConfig: any
+const configFile = __dirname + "/../config.json";
+let tmpConfig: any;
 
 interface Config {
-    server?: any,
-    reverseProxy?: any
+  server?: any;
+  reverseProxy?: any;
 }
 
 const config = (): Config => {
-    if (!tmpConfig) {
-        tmpConfig = JSON.parse(new File(configFile).readFile())
-    }
+  if (!tmpConfig) {
+    tmpConfig = JSON.parse(new File(configFile).readFile());
+  }
 
-    return tmpConfig;
-}
+  return tmpConfig;
+};
 
-export default config
+export default config;

@@ -99,22 +99,22 @@ if (!notLoad) {
 
 function load() {
   const system = new System();
-  
+
   //const server = new Server('default')
   //system.addServer(server)
-  
+
   //addMiddleware(new auth());
-//  addMiddleware(new login());
+  //  addMiddleware(new login());
   //addMiddleware(new area());
   //server.listen(8080)
- //server.addRoute({
+  //server.addRoute({
   // method: "get",
   // url: "",
   // callback: (request: Request): Response => {
-    //   return new ProxyResponse("https://photoproject-rm.de");
-    //},
-    //middlewareList: [],
-    //hostnames: ["test.dev", "192.168.2.59:8080", "lzj970-8080.preview.csb.app"] 
-    //});
+  //   return new ProxyResponse("https://photoproject-rm.de");
+  //},
+  //middlewareList: [],
+  //hostnames: ["test.dev", "192.168.2.59:8080", "lzj970-8080.preview.csb.app"]
+  //});
   //addRoute("get", "/login", null, "login", ["login"]);
 }

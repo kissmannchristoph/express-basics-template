@@ -25,8 +25,8 @@ export class ProxyResponse extends Response {
   }
 
   public sendResponse(req: any, res: any, next: any) {
-    this.server.ExpressApp.use(this.server.proxy(this.target))
-    next()
+    this.server.ExpressApp.use(this.server.proxy(this.target));
+    next();
     return true;
   }
 }

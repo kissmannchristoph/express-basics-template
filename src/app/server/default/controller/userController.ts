@@ -3,5 +3,9 @@ import { Controller } from "../../../../Framework/System";
 
 @ControllerDecorator("users")
 export default class UserController extends Controller {
-    constructor(public readonly server)
+  constructor() {
+    super();
+  }
+
+  public a() {}
 }

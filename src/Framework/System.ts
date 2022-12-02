@@ -8,7 +8,7 @@ export class Server {
   private readonly app: any;
   public readonly proxy: any;
 
-  private  controllerList: Controller[]  = [];
+  private  controllerList: any[]  = [];
   private  routeList: Route[]  = [];
   private  middlewareList: any =  [];
 
@@ -26,12 +26,9 @@ export class Server {
 
       next();
     });
-    
-    interface ServerI {
-      controller: Controller[]
-    }
 
-    const server = require("../app/server/" + this.name + "/server")
+    const server = require("../app/server/" + this.name + "/server").default;
+    console.log("ssksskskkssk", server)
     this.controllerList = server.controller
 
     this.initController() 
@@ -49,7 +46,7 @@ export class Server {
     this.middlewareList.push(middleware);
   }
 
-  addController(controller: Controller) {
+  addController(controller: any) {
     this.controllerList.push(controller)
   }
 
@@ -119,14 +116,14 @@ export abstract class Controller {
   public server: Server
   public name: string
 
-  public static getRoutes(obj: Object): Route[] {
+  public static getRoutes(obj: any): Route[] {
     let routes: Route[] = []
-    const keys = Object.keys(obj)
- 
-    for(let key of keys) {
+    const object = Object.create(obj)
+ console.log(Object.(Object.getPrototypeOf(obj)))
+    /*for(let key of keys) {
       const func = (this as any)[key]
       console.log(func) 
-    }
+    }*/
 
     return routes
   }
