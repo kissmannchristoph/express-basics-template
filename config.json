@@ -2,14 +2,15 @@
   "server": [
     {
       "name": "default",
+      "type": "Api",
       "port": 8081
-    }
-  ],
-  "reverseProxy": [
+    },
     {
       "port": 80,
       "hostname": "test.dev",
+      "type": "ReverseProxy",
       "target": "http://google.de"
     }
-  ]
+  ],
+  "reverseProxy": []
 }
