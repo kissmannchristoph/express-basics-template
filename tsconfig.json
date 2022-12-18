@@ -1,19 +1,21 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "allowJs": true,
+    "target": "ESNext",
+    "module": "CommonJS",
+    "skipLibCheck": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true,
-    "target": "ES2022",
     "noImplicitAny": true,
-    "moduleResolution": "node",
     "sourceMap": true,
-    "incremental": true,
-    "outDir": "dist",
     "baseUrl": ".",
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
     "paths": {
-      "*": ["node_modules/*", "src/types/*"]
+      "*": ["node_modules/*"],
+      "@assets/*": ["./assets/*"],
+      "@src/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "tools/**/*"]
 }

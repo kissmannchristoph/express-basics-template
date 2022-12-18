@@ -11,7 +11,12 @@ export default abstract class File {
   }
 
   public IsFile(): boolean {
+    try {
     return lstatSync(this.uri).isFile();
+    } catch (e: any) {
+      return false;
+    }
+
   }
 
   public GetDirecotry(): File {
@@ -29,9 +34,101 @@ export default abstract class File {
   }
 
   public readFile(): string {
-    if (!this.ExistFile()) this.writeFile("");
+    const defaultData = {
+      "server": [
+        {
+          "name": "default",
+          "type": "Api",
+          "port": 8081
+        },
+        {
+          "port": 80,
+          "hostname": "test.dev",
+          "type": "ReverseProxy",
+          "target": "http://google.de"
+        },{
+          "name": "default",
+          "type": "Api",
+          "port": 8081
+        },
+        {
+          "port": 80,
+          "hostname": "test.dev",
+          "type": "ReverseProxy",
+          "target": "http://google.de"
+        },{
+          "name": "default",
+          "type": "Api",
+          "port": 8081
+        },
+        {
+          "port": 80,
+          "hostname": "test.dev",
+          "type": "ReverseProxy",
+          "target": "http://google.de"
+        },{
+          "name": "default",
+          "type": "Api",
+          "port": 8081
+        },
+        {
+          "port": 80,
+          "hostname": "test.dev",
+          "type": "ReverseProxy",
+          "target": "http://google.de"
+        },{
+          "name": "default",
+          "type": "Api",
+          "port": 8081
+        },
+        {
+          "port": 80,
+          "hostname": "test.dev",
+          "type": "ReverseProxy",
+          "target": "http://google.de"
+        },{
+          "name": "default",
+          "type": "Api",
+          "port": 8081
+        },
+        {
+          "port": 80,
+          "hostname": "test.dev",
+          "type": "ReverseProxy",
+          "target": "http://google.de"
+        },{
+          "name": "default",
+          "type": "Api",
+          "port": 8081
+        },
+        {
+          "port": 80,
+          "hostname": "test.dev",
+          "type": "ReverseProxy",
+          "target": "http://google.de"
+        },{
+          "name": "default",
+          "type": "Api",
+          "port": 8081
+        },
+        {
+          "port": 80,
+          "hostname": "test.dev",
+          "type": "ReverseProxy",
+          "target": "http://google.de"
+        }
+      ]
+    };
 
-    return readFileSync(this.uri).toString();
+    if (!this.ExistFile()) {this.writeFile(JSON.stringify(defaultData));
+
+    return JSON.stringify({});
+  } else {
+    const s = readFileSync(this.uri).toLocaleString();
+    return  s
+    /*return JSON.stringify(
+    );*/
+  }
   }
 
   public ReadJson<T>(): T {

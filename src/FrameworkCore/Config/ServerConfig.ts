@@ -17,6 +17,7 @@ export interface ReverseProxyI {
 export interface ServerConfigI {
   name: string;
   type: string;
+  port: number;
 }
 
 export default abstract class ServerConfig
@@ -25,7 +26,8 @@ export default abstract class ServerConfig
 {
   abstract name: string;
   abstract type: string;
-
+  abstract port: number;
+  
   constructor(data: string) {
     super(__dirname, data);
   }

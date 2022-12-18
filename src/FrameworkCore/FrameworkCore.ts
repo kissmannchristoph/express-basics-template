@@ -1,43 +1,39 @@
-import File from "../File";
+
 import StaticFile from "./File/StaticFile";
-import { Create as ServerCreate } from "./Server/Server";
+import Server, {CreateServer}  from "./Server/Server";
 import EnvConfig from "./Config/EnvConfig";
 import Path from "path";
 import ServerConfig from "./Config/ServerConfig";
-
+import ReverseProxy from "./Server/ReverseProxy";
+import Api from "./Server/Api";
 export default class FrameworkCore {
-  constructor(
-    private env: EnvConfig,
+  public constructor(
+    private env: any,
     private staticFileDirs: StaticFile[],
     private serverRootDir: string
   ) {
-    this.initServer();
+   this.initServer();
   }
 
   private initServer() {
-    if (this.env.server == null) return;
+    if (this.Env().server == null) return;
 
-    for (let i = 0; i < this.env.server.length; i++) {
-      const serverConfig: ServerConfig = this.env.server[i];
-      ServerCreate(this, serverConfig);
+    for (let i = 0; i < this.Env().server.length; i++) {
+      const serverConfig: ServerConfig = this.Env().server[i];
+
+      let server: Server | null = null;
+
+      switch(serverConfig.type) {
+        case "Api": server = new Api(this, serverConfig); break;
+        case "ReverseProxy": server = new ReverseProxy(this, serverConfig); break;
+      }
+
+      server.Start();
     }
-    /*[
-      {
-        name: "default",
-        type: "Api",
-        port: 8081,
-      },
-      {
-        port: 80,
-        hostname: "test.dev",
-        type: "ReverseProxy",
-        target: "http://google.de",
-      },
-    ];*/
   }
 
   public Env(): EnvConfig {
-    return this.env;
+    return this.env.data;
   }
 
   public GetStaticFiles(name: string): StaticFile {
@@ -47,20 +43,13 @@ export default class FrameworkCore {
   }
 }
 
-export abstract class CreateOptions {
+export class CreateOptions {
   public rootDir: string;
-  public staticFileDirs?: StaticFile[];
+  public staticFileDirs: StaticFile[];
   public serverRootDir: string;
 }
 
-const Create = (createOptions: CreateOptions) => {
-  console.log(
-    "[FrameworkCore]",
-    "Call Function",
-    "Create",
-    "Data",
-    createOptions
-  );
+function Build (createOptions: any)  {
   let env = new EnvConfig(Path.join(createOptions.rootDir, "env.json"));
 
   let staticFileDirs: any = [];
@@ -71,6 +60,14 @@ const Create = (createOptions: CreateOptions) => {
   let { serverRootDir } = createOptions;
 
   let frameworkCore = new FrameworkCore(env, staticFileDirs, serverRootDir);
-};
+  return frameworkCore;
 
-export { Create };
+}
+
+const create = (createOptions: any) =>{
+  console.log("asd")
+  Build(createOptions);
+
+} 
+export {create}
+

@@ -1,0 +1,1 @@
+{"version":3,"file":"ReverseProxy.js","sourceRoot":"","sources":["../../../src/FrameworkCore/Server/ReverseProxy.ts"],"names":[],"mappings":"AAAA,OAAO,MAAM,MAAM,UAAU,CAAC;AAI9B,MAAM,CAAC,OAAO,OAAO,YAAa,SAAQ,MAAM;IAC9C;QACE,KAAK,EAAE,CAAC;IACV,CAAC;IAEe,KAAK,KAAS,CAAC;CAChC"}
