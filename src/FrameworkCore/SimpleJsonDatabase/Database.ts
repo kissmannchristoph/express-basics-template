@@ -1,4 +1,4 @@
-import JsonDBFile from "./JsonDBFile";
+import JsonDBFile from "./index";
 import Table from "./Table";
 
 export default class Database {

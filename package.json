@@ -2,11 +2,11 @@
   "name": "nodejs-typescript",
   "version": "1.0.0",
   "description": "NodeJs with Typescript",
-  "main": "src/index.ts",
+  "main": "src/FrameworkCore-sample/index.ts",
   "scripts": {
     "build": "tsc",
     "start": "tsc & node ./dist/index.js",
-    "watch": "tsc -w & nodemon -q -w dist dist/index.js",
+    "watch": "tsc -w & nodemon -q -w dist dist/FrameworkCore-sample/index.js",
     "format": "prettier --write ."
   },
   "keywords": [],

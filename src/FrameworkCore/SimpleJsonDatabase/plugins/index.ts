@@ -1,4 +1,4 @@
-import DynamicClass from "../../class/DynamicClass";
+import DynamicClass from "../../../class/DynamicClass";
 import Table from "../Table";
 import Plugin from "../Plugin";
 
