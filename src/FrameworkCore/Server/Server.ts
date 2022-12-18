@@ -1,24 +1,38 @@
-import Api from "./Api";
-import ReverseProxy from "./ReverseProxy";
-import FrameworkCore from "../FrameworkCore";
 import ServerConfig from "../Config/ServerConfig";
+import FrameworkCore from "../FrameworkCore";
+import HttpServer from "../Net/HttpServer";
+import Request from "../Net/Request"
+import Response from "../Net/Response"
 
 export default abstract class Server {
-  public frameworkCore: FrameworkCore;
-  public serverConfig: ServerConfig;
+  
+  private frameworkCore: FrameworkCore
+  private serverConfig: ServerConfig
+  
+private httpServer: HttpServer
 
-  public abstract Start(): any;
+   constructor( frameworkCore: FrameworkCore,
+     serverConfig: ServerConfig) {
+      this.frameworkCore = frameworkCore;
+      this.serverConfig = serverConfig;
+
+      this.httpServer = new HttpServer(serverConfig.port, this.requestListener)
+  }
+
+  public abstract Start():any ;
+  public abstract requestListener(req: Request, res: Response): any;
 }
 
-const types: any = { Api, ReverseProxy };
+const CreateServer = (frameworkCore: any, serverConfig: any, server: Server) => {
 
-const Create = (frameworkCore: FrameworkCore, serverConfig: ServerConfig) => {
-  console.log("asd");
-  const server = types[serverConfig.type];
-  const serverInstance = new server();
+
+
+  //let server = types[serverConfig.type];
+  /*let serverObject = Object.create(server);
+  let serverInstance = new serverObject(frameworkCore, serverConfig);
   serverInstance.frameworkCore = frameworkCore;
-  serverInstance.serverConfig = serverConfig;
-  return serverInstance;
+  serverInstance.serverConfig = serverConfig;*/
+  return server;
 };
 
-export { types, Create };
+export { CreateServer };

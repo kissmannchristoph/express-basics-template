@@ -27,12 +27,17 @@ export default abstract class Config extends File {
     }
   }
 
-  public Save() {
-    this.writeFile(JSON.stringify(this.data));
+  public Save(data: any | null = null) {
+    if (data != null) {
+    this.writeFile(JSON.stringify(data));
+    } else {
+      this.writeFile(JSON.stringify(this.data));
+    }
   }
 
   public Load<T>(str: string = null) {
     this.data = JSON.parse(str ? str : this.readFile()) as T;
-    this.mergeDataAndClass();
+    Object.assign(this, this.data);
+    //this.mergeDataAndClass();
   }
 }

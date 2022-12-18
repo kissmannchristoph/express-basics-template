@@ -1,0 +1,1 @@
+{"version":3,"file":"Api.js","sourceRoot":"","sources":["../../../src/FrameworkCore/Server/Api.ts"],"names":[],"mappings":"AAAA,OAAO,MAAM,MAAM,UAAU,CAAC;AAI9B,MAAM,CAAC,OAAO,OAAO,GAAI,SAAQ,MAAM;IAErC;QACE,KAAK,EAAE,CAAC;IACV,CAAC;IAEe,KAAK;QACnB,OAAO,CAAC,GAAG,CAAC,KAAK,CAAC,CAAC;IACrB,CAAC;CACF"}

@@ -8,7 +8,7 @@ export interface EnvConfigI {
 export default class EnvConfig extends Config implements EnvConfigI {
   server: ServerConfig[];
 
-  constructor(uri: string) {
+  public constructor(uri: string) {
     super(uri, null);
   }
 }
